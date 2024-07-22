@@ -7,7 +7,7 @@ const { authController } = require("../../controllers");
 
 router.post(
   "/register",
-  validate(authValidation.registerUser),
+  validate(authValidation.register),
   authController.registerUser
 );
 
