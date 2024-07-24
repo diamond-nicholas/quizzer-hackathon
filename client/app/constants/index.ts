@@ -2,12 +2,13 @@ import program from '@/public/programing.png';
 import choose from '@/public/choose.png';
 import score from '@/public/score.png';
 import leaderboard from '@/public/leaderboard.png';
-import { MdAssignmentAdd, MdMobileFriendly, MdOutlineConnectWithoutContact } from 'react-icons/md';
+import { MdAssignmentAdd, MdLeaderboard, MdMobileFriendly, MdOutlineConnectWithoutContact, MdWorkHistory } from 'react-icons/md';
+import { TbBrandSpeedtest } from 'react-icons/tb';
 
 export const navItems = [
-    { name: 'Quiz', route: '/quiz' },
-    { name: 'Leaderboard', route: '/leader-board' },
-    { name: 'Score history', route: '/score-history' },
+    { name: 'Quiz', route: '/quiz', image: TbBrandSpeedtest },
+    { name: 'Leaderboard', route: '/leader-board', image: MdLeaderboard },
+    { name: 'Score history', route: '/score-history', image: MdWorkHistory },
 ];
 
 export const featuresCard = [

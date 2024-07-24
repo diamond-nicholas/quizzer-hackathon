@@ -1,16 +1,5 @@
 {
-  "node": {
-    "8697f36227aa183ebc8ca8aaa7fbfa37c1864594": {
-      "workers": {
-        "app/(pages)/auth/login/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fmacbookair%2FDesktop%2Fquizzer-hackathon%2Fclient%2Fapp%2Flib%2Faction.ts%22%2C%5B%22SignIn%22%5D%5D%5D&__client_imported__=true!",
-        "app/(pages)/auth/signup/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fmacbookair%2FDesktop%2Fquizzer-hackathon%2Fclient%2Fapp%2Flib%2Faction.ts%22%2C%5B%22SignIn%22%5D%5D%5D&__client_imported__=true!"
-      },
-      "layer": {
-        "app/(pages)/auth/login/page": "action-browser",
-        "app/(pages)/auth/signup/page": "action-browser"
-      }
-    }
-  },
+  "node": {},
   "edge": {},
-  "encryptionKey": "ilGE0k/w/6n1oiI58Cgd3J4vTJjCJlmee7i4yyLhSUA="
+  "encryptionKey": "cJlPSVz2kyNbrrTK76zXTFb2nM/mZ0gVDiK5nPGhCms="
 }

@@ -1,7 +1,12 @@
 export interface RegisterReq {
-    user: UserProps;
-    token: string;
+    user: User;
+    token: Token;
     message: string;
+}
+
+interface Token {
+    token: string;
+    expires: string;
 }
 
 export interface SignupProps {
@@ -9,6 +14,22 @@ export interface SignupProps {
     password: string;
     roles?: string;
     fullName: string;
+}
+
+export interface SelfReq {
+    user: UserProps;
+    token: {
+        token: string;
+        expires: string;
+    };
+    message: string;
+}
+
+export interface User {
+    fullName: string;
+    email: string;
+    role: string;
+    id: string;
 }
 
 export interface UserProps {
