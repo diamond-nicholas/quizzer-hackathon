@@ -18,9 +18,22 @@ const editQuiz = {
     title: Joi.string().required(),
     description: Joi.string(),
   }),
+  params: Joi.object().keys({
+    quizId: Joi.string().required(),
+  }),
+};
+
+const getOneQuiz = {
+  headers: Joi.object({
+    token: Joi.string().required(),
+  }),
+  params: Joi.object().keys({
+    quizId: Joi.string().required(),
+  }),
 };
 
 module.exports = {
   createQuiz,
   editQuiz,
+  getOneQuiz,
 };

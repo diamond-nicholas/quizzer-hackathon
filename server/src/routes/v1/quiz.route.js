@@ -19,4 +19,11 @@ router.patch(
   quizController.editQuiz
 );
 
+router.get(
+  "/:quizId",
+  isAuthenticated,
+  validate(quizValidation.getOneQuiz),
+  quizController.getOneQuiz
+);
+
 module.exports = router;

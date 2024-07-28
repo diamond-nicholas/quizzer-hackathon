@@ -32,7 +32,17 @@ const editQuiz = catchAsync(async (req, res) => {
   });
 });
 
+const getOneQuiz = catchAsync(async (req, res) => {
+  const result = await quizService.getOneQuiz(req.user, req.params.quizId);
+
+  res.status(httpStatus.OK).send({
+    message: "",
+    data: result,
+  });
+});
+
 module.exports = {
   createQuiz,
   editQuiz,
+  getOneQuiz,
 };

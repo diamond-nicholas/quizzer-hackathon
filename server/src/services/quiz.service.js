@@ -41,7 +41,25 @@ const editQuiz = async (quizData, quizId, currentUser) => {
   return quiz;
 };
 
+const getOneQuiz = async (currentUser, quizId) => {
+  const quiz = await Quiz.findById(quizId).populate("questions").exec();
+
+  if (!quiz) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Quiz not found");
+  }
+
+  if (
+    !quiz.isPublished &&
+    quiz.user.toString() !== currentUser._id.toString()
+  ) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, "Quiz not published");
+  }
+
+  return quiz;
+};
+
 module.exports = {
   createQuiz,
   editQuiz,
+  getOneQuiz,
 };
