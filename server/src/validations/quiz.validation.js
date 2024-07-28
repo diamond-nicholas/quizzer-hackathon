@@ -6,6 +6,7 @@ const createQuiz = {
   }),
   body: Joi.object().keys({
     title: Joi.string().required(),
+    passMark: Joi.number().required(),
     description: Joi.string(),
   }),
 };
@@ -16,6 +17,7 @@ const editQuiz = {
   }),
   body: Joi.object().keys({
     title: Joi.string().required(),
+    passMark: Joi.number().required(),
     description: Joi.string(),
   }),
   params: Joi.object().keys({

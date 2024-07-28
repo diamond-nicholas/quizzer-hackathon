@@ -3,6 +3,7 @@ const authRoute = require("./auth.route");
 const quizRoute = require("./quiz.route");
 const questionRoute = require("./question.route");
 const attemptRoute = require("./attempt.route");
+const leaderboardRoute = require("./leaderBoard.route");
 
 const router = express.Router();
 
@@ -22,6 +23,10 @@ const defaultRoutes = [
   {
     path: "/attempt",
     route: attemptRoute,
+  },
+  {
+    path: "/leaderboard",
+    route: leaderboardRoute,
   },
 ];
 

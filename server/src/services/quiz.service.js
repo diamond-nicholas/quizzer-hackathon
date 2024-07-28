@@ -16,6 +16,7 @@ const createQuiz = async (quizData, currentUser) => {
   const quiz = await Quiz.create({
     title: quizData.title,
     user: currentUser._id,
+    passMark: quizData.passMark,
     description: quizData.description,
   });
 
@@ -36,6 +37,7 @@ const editQuiz = async (quizData, quizId, currentUser) => {
 
   quiz.title = quizData.title;
   quiz.description = quizData.description;
+  quiz.quizData = quizData.quizData;
 
   await quiz.save();
   return quiz;

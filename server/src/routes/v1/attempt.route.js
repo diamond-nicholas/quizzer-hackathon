@@ -19,4 +19,27 @@ router.post(
   attemptController.recordQuestionAttempt
 );
 
+router.get(
+  "/question/:attemptId/next",
+  isAuthenticated,
+  validate(attemptValidation.getNextQuestion),
+  attemptController.getNextQuestion
+);
+
+router.get(
+  "/question/:attemptId/prev",
+  isAuthenticated,
+  validate(attemptValidation.getPreviousQuestion),
+  attemptController.getPreviousQuestion
+);
+
+router.post(
+  "/:attemptId/submit",
+  isAuthenticated,
+  validate(attemptValidation.sumbitQuiz),
+  attemptController.sumbitQuiz
+);
+
+router.get("/history", isAuthenticated, attemptController.getQuizHistory);
+
 module.exports = router;
