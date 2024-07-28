@@ -258,6 +258,64 @@ const getLeaderBoard = async (currentUser, quizId) => {
   return leaderboard;
 };
 
+const getQuizHistory = async (currentUser) => {
+  const attempts = await Attempt.find({ user: currentUser._id })
+    .populate("quiz")
+    .populate("user");
+
+  let passedCount = 0;
+  let failedCount = 0;
+  let completeCount = 0;
+  let incompleteCount = 0;
+
+  const attemptDetails = attempts.map((attempt) => {
+    const isPassed = attempt.totalCorrectMarks >= attempt.quiz.passMark;
+    const isComplete = attempt.completed;
+
+    if (isComplete) {
+      completeCount++;
+      if (isPassed) {
+        passedCount++;
+      } else {
+        failedCount++;
+      }
+    } else {
+      incompleteCount++;
+    }
+
+    const durationInMinutes =
+      (attempt.endTime - attempt.startTime) / (1000 * 60);
+    const formattedDuration = isNaN(durationInMinutes)
+      ? "0.00"
+      : durationInMinutes.toFixed(2);
+
+    return {
+      name: attempt.user.fullName,
+      duration: `${formattedDuration} minutes`,
+      score: attempt.totalCorrectMarks,
+      passMark: attempt.quiz.passMark,
+      title: attempt.quiz.title,
+      totalQuestions: attempt.quiz.totalQuestions,
+      totalTimeAllowed: `${(attempt.quiz.totalTimeAllowed / 60).toFixed(
+        2
+      )} minutes`,
+      isPassed,
+      isComplete,
+    };
+  });
+
+  return {
+    summary: {
+      totalAttempts: attempts.length,
+      passedCount,
+      failedCount,
+      completeCount,
+      incompleteCount,
+    },
+    details: attemptDetails,
+  };
+};
+
 module.exports = {
   startQuizAttempt,
   recordQuestionAttempt,
@@ -265,4 +323,5 @@ module.exports = {
   getPreviousQuestion,
   sumbitQuiz,
   getLeaderBoard,
+  getQuizHistory,
 };

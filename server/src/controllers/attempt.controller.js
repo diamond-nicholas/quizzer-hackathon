@@ -86,6 +86,15 @@ const getLeaderBoard = catchAsync(async (req, res) => {
   });
 });
 
+const getQuizHistory = catchAsync(async (req, res) => {
+  const result = await attemptService.getQuizHistory(req.user);
+
+  res.status(httpStatus.ACCEPTED).send({
+    message: "",
+    data: result,
+  });
+});
+
 module.exports = {
   startQuizAttempt,
   recordQuestionAttempt,
@@ -93,4 +102,5 @@ module.exports = {
   getPreviousQuestion,
   sumbitQuiz,
   getLeaderBoard,
+  getQuizHistory,
 };

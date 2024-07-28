@@ -40,4 +40,6 @@ router.post(
   attemptController.sumbitQuiz
 );
 
+router.get("/history", isAuthenticated, attemptController.getQuizHistory);
+
 module.exports = router;

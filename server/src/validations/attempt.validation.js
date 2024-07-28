@@ -57,6 +57,12 @@ const sumbitQuiz = {
   }),
 };
 
+const getQuizHistory = {
+  headers: Joi.object({
+    token: Joi.string().required(),
+  }),
+};
+
 module.exports = {
   startQuizAttempt,
   recordQuestionAttempt,
@@ -64,4 +70,5 @@ module.exports = {
   getPreviousQuestion,
   sumbitQuiz,
   getLeaderBoard,
+  getQuizHistory,
 };

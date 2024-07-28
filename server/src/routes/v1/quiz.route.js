@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const validate = require("../../middlewares/validate");
 const isAuthenticated = require("../../middlewares/isAuthenticated");
-const { quizValidation } = require("../../validations");
-const { quizController } = require("../../controllers");
+const { quizValidation, attemptValidation } = require("../../validations");
+const { quizController, attemptController } = require("../../controllers");
 
 router.post(
   "/create",
@@ -39,5 +39,12 @@ router.patch(
   validate(quizValidation.publishQuiz),
   quizController.publishQuiz
 );
+
+// router.get(
+//   "/history",
+//   isAuthenticated,
+//   // validate(attemptValidation.getQuizHistory),
+//   attemptController.getQuizHistory
+// );
 
 module.exports = router;
