@@ -25,6 +25,20 @@ const startQuizAttempt = catchAsync(async (req, res) => {
   });
 });
 
+const recordQuestionAttempt = catchAsync(async (req, res) => {
+  const result = await attemptService.recordQuestionAttempt(
+    req.user,
+    req.params.questionId,
+    req.body
+  );
+
+  res.status(httpStatus.ACCEPTED).send({
+    message: "",
+    data: result,
+  });
+});
+
 module.exports = {
   startQuizAttempt,
+  recordQuestionAttempt,
 };

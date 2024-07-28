@@ -12,4 +12,11 @@ router.post(
   attemptController.startQuizAttempt
 );
 
+router.post(
+  "/:questionId/question",
+  isAuthenticated,
+  validate(attemptValidation.recordQuestionAttempt),
+  attemptController.recordQuestionAttempt
+);
+
 module.exports = router;

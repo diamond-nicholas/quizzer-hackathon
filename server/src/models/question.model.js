@@ -30,10 +30,6 @@ const questionSchema = mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  durationUsed: {
-    type: Number, //in secs
-    default: 0,
-  },
   allotedTime: {
     type: Number,
     required: true,
