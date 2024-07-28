@@ -38,7 +38,59 @@ const recordQuestionAttempt = catchAsync(async (req, res) => {
   });
 });
 
+const getNextQuestion = catchAsync(async (req, res) => {
+  const result = await attemptService.getNextQuestion(
+    req.user,
+    req.params.attemptId
+  );
+
+  res.status(httpStatus.ACCEPTED).send({
+    message: "",
+    data: result,
+  });
+});
+
+const getPreviousQuestion = catchAsync(async (req, res) => {
+  const result = await attemptService.getPreviousQuestion(
+    req.user,
+    req.params.attemptId
+  );
+
+  res.status(httpStatus.ACCEPTED).send({
+    message: "",
+    data: result,
+  });
+});
+
+const sumbitQuiz = catchAsync(async (req, res) => {
+  const result = await attemptService.sumbitQuiz(
+    req.user,
+    req.params.attemptId
+  );
+
+  res.status(httpStatus.ACCEPTED).send({
+    message: "",
+    data: result,
+  });
+});
+
+const getLeaderBoard = catchAsync(async (req, res) => {
+  const result = await attemptService.getLeaderBoard(
+    req.user,
+    req.params.quizId
+  );
+
+  res.status(httpStatus.ACCEPTED).send({
+    message: "",
+    data: result,
+  });
+});
+
 module.exports = {
   startQuizAttempt,
   recordQuestionAttempt,
+  getNextQuestion,
+  getPreviousQuestion,
+  sumbitQuiz,
+  getLeaderBoard,
 };

@@ -21,7 +21,47 @@ const recordQuestionAttempt = {
   }),
 };
 
+const getNextQuestion = {
+  headers: Joi.object({
+    token: Joi.string().required(),
+  }),
+  params: Joi.object().keys({
+    attemptId: Joi.string().required(),
+  }),
+};
+
+const getPreviousQuestion = {
+  headers: Joi.object({
+    token: Joi.string().required(),
+  }),
+  params: Joi.object().keys({
+    attemptId: Joi.string().required(),
+  }),
+};
+
+const getLeaderBoard = {
+  headers: Joi.object({
+    token: Joi.string().required(),
+  }),
+  params: Joi.object().keys({
+    quizId: Joi.string().required(),
+  }),
+};
+
+const sumbitQuiz = {
+  headers: Joi.object({
+    token: Joi.string().required(),
+  }),
+  params: Joi.object().keys({
+    attemptId: Joi.string().required(),
+  }),
+};
+
 module.exports = {
   startQuizAttempt,
   recordQuestionAttempt,
+  getNextQuestion,
+  getPreviousQuestion,
+  sumbitQuiz,
+  getLeaderBoard,
 };

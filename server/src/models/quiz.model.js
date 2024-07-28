@@ -26,6 +26,10 @@ const quizSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    passMark: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,

@@ -38,6 +38,10 @@ const attemptedQuestionSchema = mongoose.Schema({
     type: Number,
     default: 0,
   },
+  isAttempted: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const AttemptedQuestion = mongoose.model(
