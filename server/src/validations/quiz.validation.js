@@ -32,6 +32,15 @@ const getOneQuiz = {
   }),
 };
 
+const publishQuiz = {
+  headers: Joi.object({
+    token: Joi.string().required(),
+  }),
+  params: Joi.object().keys({
+    quizId: Joi.string().required(),
+  }),
+};
+
 const getAllQuiz = {
   headers: Joi.object({
     token: Joi.string().required(),
@@ -43,4 +52,5 @@ module.exports = {
   editQuiz,
   getOneQuiz,
   getAllQuiz,
+  publishQuiz,
 };

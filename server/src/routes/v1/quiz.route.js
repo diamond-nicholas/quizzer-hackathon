@@ -33,4 +33,11 @@ router.get(
   quizController.getAllQuiz
 );
 
+router.patch(
+  "/:quizId/publish",
+  isAuthenticated,
+  validate(quizValidation.publishQuiz),
+  quizController.publishQuiz
+);
+
 module.exports = router;

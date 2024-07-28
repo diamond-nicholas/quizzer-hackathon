@@ -10,8 +10,15 @@ router.post(
   "/create",
   isAuthenticated,
   upload.single("file"),
-  // validate(questionValidation.createQuestion),
+  validate(questionValidation.createQuestion),
   questionController.createQuestion
+);
+
+router.patch(
+  "/:questionId/edit",
+  isAuthenticated,
+  validate(questionValidation.editQuestion),
+  questionController.editQuestion
 );
 
 module.exports = router;

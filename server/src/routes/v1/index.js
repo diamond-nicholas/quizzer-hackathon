@@ -2,6 +2,7 @@ const express = require("express");
 const authRoute = require("./auth.route");
 const quizRoute = require("./quiz.route");
 const questionRoute = require("./question.route");
+const attemptRoute = require("./attempt.route");
 
 const router = express.Router();
 
@@ -17,6 +18,10 @@ const defaultRoutes = [
   {
     path: "/question",
     route: questionRoute,
+  },
+  {
+    path: "/attempt",
+    route: attemptRoute,
   },
 ];
 

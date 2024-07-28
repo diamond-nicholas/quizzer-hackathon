@@ -34,14 +34,6 @@ const questionSchema = mongoose.Schema({
     type: Number, //in secs
     default: 0,
   },
-  startTime: {
-    type: String,
-    default: null,
-  },
-  endTime: {
-    type: String,
-    default: null,
-  },
   allotedTime: {
     type: Number,
     required: true,
@@ -50,6 +42,10 @@ const questionSchema = mongoose.Schema({
     type: String,
     enum: ["hours", "minutes", "seconds"],
     default: "minutes",
+  },
+  marksAwarded: {
+    type: Number,
+    default: 0,
   },
 });
 

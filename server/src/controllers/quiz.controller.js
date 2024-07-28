@@ -50,9 +50,19 @@ const getAllQuiz = catchAsync(async (req, res) => {
   });
 });
 
+const publishQuiz = catchAsync(async (req, res) => {
+  const result = await quizService.publishQuiz(req.user, req.params.quizId);
+
+  res.status(httpStatus.ACCEPTED).send({
+    message: "",
+    data: result,
+  });
+});
+
 module.exports = {
   createQuiz,
   editQuiz,
   getOneQuiz,
   getAllQuiz,
+  publishQuiz,
 };

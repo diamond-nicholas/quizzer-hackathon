@@ -76,9 +76,50 @@ const getAllQuiz = async (currentUser) => {
   }
 };
 
+const publishQuiz = async (currentUser, quizId) => {
+  const quiz = await Quiz.findById(quizId);
+  if (!quiz) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Quiz not found");
+  }
+
+  if (currentUser.role !== "tutor") {
+    throw new ApiError(
+      httpStatus.UNAUTHORIZED,
+      "Only tutor can publish a quiz"
+    );
+  }
+
+  if (currentUser._id.toString() !== quiz.user.toString()) {
+    throw new ApiError(
+      httpStatus.UNAUTHORIZED,
+      "Only creator can publish quiz"
+    );
+  }
+
+  quiz.isPublished = true;
+
+  const totalTimeAllowedInMinutes = quiz.totalTimeAllowed / 60 + " minutes";
+
+  const response = {
+    _id: quiz._id,
+    title: quiz.title,
+    user: quiz.user,
+    totalTimeAllowed: totalTimeAllowedInMinutes,
+    totalQuestions: quiz.totalQuestions,
+    isPublished: quiz.isPublished,
+    createdAt: quiz.createdAt,
+    updatedAt: quiz.updatedAt,
+    __v: quiz.__v,
+    id: quiz.id,
+  };
+  await quiz.save();
+  return response;
+};
+
 module.exports = {
   createQuiz,
   editQuiz,
   getOneQuiz,
   getAllQuiz,
+  publishQuiz,
 };

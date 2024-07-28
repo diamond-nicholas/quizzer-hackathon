@@ -13,13 +13,9 @@ const pick = require("../utils/pick");
 const Upload = require("../utils/cloudinaryConfig");
 
 const createQuestion = catchAsync(async (req, res) => {
-  // if (!req.file) {
-  //   throw new ApiError(httpStatus.UNPROCESSABLE_ENTITY, "No files uploaded");
-  // }
-
-  const fileBuffer = req.file.buffer;
   let upload;
   if (req.file) {
+    const fileBuffer = req.file.buffer;
     upload = await Upload.uploadFile(fileBuffer);
   }
 
@@ -35,6 +31,20 @@ const createQuestion = catchAsync(async (req, res) => {
   });
 });
 
+const editQuestion = catchAsync(async (req, res) => {
+  const result = await questionService.editQuestion(
+    req.user,
+    req.params.questionId,
+    req.body
+  );
+
+  res.status(httpStatus.ACCEPTED).send({
+    message: "",
+    data: result,
+  });
+});
+
 module.exports = {
   createQuestion,
+  editQuestion,
 };
