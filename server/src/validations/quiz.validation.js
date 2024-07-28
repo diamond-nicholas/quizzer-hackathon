@@ -32,8 +32,15 @@ const getOneQuiz = {
   }),
 };
 
+const getAllQuiz = {
+  headers: Joi.object({
+    token: Joi.string().required(),
+  }),
+};
+
 module.exports = {
   createQuiz,
   editQuiz,
   getOneQuiz,
+  getAllQuiz,
 };

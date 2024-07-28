@@ -58,8 +58,27 @@ const getOneQuiz = async (currentUser, quizId) => {
   return quiz;
 };
 
+const getAllQuiz = async (currentUser) => {
+  const quizes = await Quiz.find({});
+
+  const visibleQuizForStudents = quizes.filter((quiz) => quiz.isPublished);
+
+  const visibleQuizForTutor = quizes.filter((quiz) => {
+    return (
+      quiz.isPublished || quiz.user.toString() === currentUser._id.toString()
+    );
+  });
+
+  if (currentUser.role !== "tutor") {
+    return visibleQuizForStudents;
+  } else {
+    return visibleQuizForTutor;
+  }
+};
+
 module.exports = {
   createQuiz,
   editQuiz,
   getOneQuiz,
+  getAllQuiz,
 };

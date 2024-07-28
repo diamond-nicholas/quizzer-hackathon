@@ -41,8 +41,18 @@ const getOneQuiz = catchAsync(async (req, res) => {
   });
 });
 
+const getAllQuiz = catchAsync(async (req, res) => {
+  const result = await quizService.getAllQuiz(req.user);
+
+  res.status(httpStatus.OK).send({
+    message: "",
+    data: result,
+  });
+});
+
 module.exports = {
   createQuiz,
   editQuiz,
   getOneQuiz,
+  getAllQuiz,
 };

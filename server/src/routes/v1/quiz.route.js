@@ -26,4 +26,11 @@ router.get(
   quizController.getOneQuiz
 );
 
+router.get(
+  "/",
+  isAuthenticated,
+  validate(quizValidation.getAllQuiz),
+  quizController.getAllQuiz
+);
+
 module.exports = router;
