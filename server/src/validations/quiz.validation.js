@@ -16,8 +16,8 @@ const editQuiz = {
     token: Joi.string().required(),
   }),
   body: Joi.object().keys({
-    title: Joi.string().required(),
-    passMark: Joi.number().required(),
+    title: Joi.string(),
+    passMark: Joi.number(),
     description: Joi.string(),
   }),
   params: Joi.object().keys({
