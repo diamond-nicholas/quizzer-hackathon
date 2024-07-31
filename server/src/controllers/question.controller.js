@@ -29,6 +29,11 @@ const createQuestion = catchAsync(async (req, res) => {
     message: "success",
     data: result,
   });
+  try {
+  } catch (error) {
+    console.log(error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ error: error.message });
+  }
 });
 
 const editQuestion = catchAsync(async (req, res) => {
