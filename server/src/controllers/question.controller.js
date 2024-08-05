@@ -32,7 +32,7 @@ const createQuestion = catchAsync(async (req, res) => {
   try {
   } catch (error) {
     console.log(error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ error: error.message });
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ error: error });
   }
 });
 

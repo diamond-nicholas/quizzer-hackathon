@@ -28,6 +28,10 @@ const attemptSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    currentQuestionIndex: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,

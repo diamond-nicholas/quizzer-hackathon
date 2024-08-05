@@ -25,6 +25,7 @@ const attemptedQuestionSchema = mongoose.Schema({
   isCorrect: {
     type: Boolean,
     required: true,
+    default: false,
   },
   startTime: {
     type: Date,

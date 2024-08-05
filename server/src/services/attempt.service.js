@@ -72,9 +72,9 @@ const recordQuestionAttempt = async (currentUser, questionId, questionData) => {
     _startTime.getTime() + quiz.totalTimeAllowed * 1000
   );
 
-  // if (currentTime > allowedEndTime) {
-  //   throw new ApiError(httpStatus.FORBIDDEN, "Time is up for this quiz");
-  // }
+  if (currentTime > allowedEndTime) {
+    throw new ApiError(httpStatus.FORBIDDEN, "Time is up for this quiz");
+  }
 
   const noIncorrectOptionsSelected = question.options
     .filter((option) => !option.isCorrect)
@@ -122,36 +122,56 @@ const getNextQuestion = async (currentUser, attemptId) => {
   }
 
   const quiz = attempt.quiz;
+  const allQuestions = await Question.find({ quiz: quiz._id }).sort("_id");
 
-  const attemptedQuestions = await AttemptedQuestion.find({
-    attemptedQuizId: attemptId,
-    userId: currentUser._id,
-    isAttempted: true,
-  }).select("questionId");
+  let currentQuestionIndex = attempt.currentQuestionIndex;
 
-  console.log(attemptedQuestions, "initial");
-
-  const attemptedQuestionIds = attemptedQuestions.map((aq) => aq.questionId);
-
-  console.log(attemptedQuestionIds, "ids");
-
-  const nextQuestion = await Question.findOne({
-    quiz: quiz._id,
-    _id: { $nin: attemptedQuestionIds },
-  });
-
-  if (!nextQuestion) {
-    return "End of questions";
+  if (currentQuestionIndex >= allQuestions.length) {
+    currentQuestionIndex = allQuestions.length - 1; // Make sure it's not out of bounds
   }
+
+  const nextQuestion = allQuestions[currentQuestionIndex];
+
+  // Create or update the attempted question record
+  const attemptedQuestion = await AttemptedQuestion.findOneAndUpdate(
+    {
+      attemptedQuizId: attemptId,
+      questionId: nextQuestion._id,
+      userId: currentUser._id,
+    },
+    { startTime: new Date(), isCorrect: false },
+    { upsert: true, new: true }
+  );
+
+  // Only update the index if we are not at the end
+  if (currentQuestionIndex < allQuestions.length - 1) {
+    attempt.currentQuestionIndex = currentQuestionIndex + 1;
+  }
+  await attempt.save();
+
+  const hasPrevQuestion = currentQuestionIndex > 0;
+  const hasNextQuestion = currentQuestionIndex < allQuestions.length - 1;
+  const durationUsed = Math.floor(
+    (new Date() - new Date(attemptedQuestion.startTime)) / 60000
+  );
+  const remainingTime = nextQuestion.allotedTime - durationUsed;
 
   return {
     _id: nextQuestion._id,
     questionText: nextQuestion.questionText,
     options: nextQuestion.options.map((opt) => opt.text),
+    image: nextQuestion.image,
+    isMultipleSelect: nextQuestion.isMultipleSelect,
+    allotedTime: nextQuestion.allotedTime,
+    allotedMetric: nextQuestion.allotedMetric,
+    durationUsed: durationUsed,
+    remainingTime: remainingTime,
+    hasPrevQuestion: hasPrevQuestion,
+    hasNextQuestion: hasNextQuestion,
   };
 };
 
-const getPreviousQuestion = async (currentUser, attemptId) => {
+const getPrevQuestion = async (currentUser, attemptId) => {
   if (currentUser.role !== "user") {
     throw new ApiError(
       httpStatus.UNAUTHORIZED,
@@ -166,30 +186,47 @@ const getPreviousQuestion = async (currentUser, attemptId) => {
   }
 
   const quiz = attempt.quiz;
+  const allQuestions = await Question.find({ quiz: quiz._id }).sort("_id");
 
-  const attemptedQuestions = await AttemptedQuestion.find({
-    attemptedQuizId: attemptId,
-    userId: currentUser._id,
-    isAttempted: true,
-  }).select("questionId");
+  let currentQuestionIndex = attempt.currentQuestionIndex;
 
-  const attemptedQuestionIds = attemptedQuestions.map((aq) => aq.questionId);
-
-  console.log(attemptedQuestionIds, "ids");
-
-  const previousQuestion = await Question.findOne({
-    quiz: quiz._id,
-    _id: { $in: attemptedQuestionIds },
-  }).sort({ _id: -1 });
-
-  if (!previousQuestion) {
-    return "No previous questions";
+  if (currentQuestionIndex <= 0) {
+    currentQuestionIndex = 0; // Make sure it's not out of bounds
+  } else {
+    currentQuestionIndex -= 1;
   }
 
+  const prevQuestion = allQuestions[currentQuestionIndex];
+
+  const attemptedQuestion = await AttemptedQuestion.findOne({
+    attemptedQuizId: attemptId,
+    questionId: prevQuestion._id,
+    userId: currentUser._id,
+  });
+
+  // Update the current question index in the attempt
+  attempt.currentQuestionIndex = currentQuestionIndex;
+  await attempt.save();
+
+  const hasPrevQuestion = currentQuestionIndex > 0;
+  const hasNextQuestion = currentQuestionIndex < allQuestions.length - 1;
+  const durationUsed = attemptedQuestion
+    ? Math.floor((new Date() - new Date(attemptedQuestion.startTime)) / 60000)
+    : 0;
+  const remainingTime = prevQuestion.allotedTime - durationUsed;
+
   return {
-    _id: previousQuestion._id,
-    questionText: previousQuestion.questionText,
-    options: previousQuestion.options.map((opt) => opt.text),
+    _id: prevQuestion._id,
+    questionText: prevQuestion.questionText,
+    options: prevQuestion.options.map((opt) => opt.text),
+    image: prevQuestion.image,
+    isMultipleSelect: prevQuestion.isMultipleSelect,
+    allotedTime: prevQuestion.allotedTime,
+    allotedMetric: prevQuestion.allotedMetric,
+    durationUsed: durationUsed,
+    remainingTime: remainingTime,
+    hasPrevQuestion: hasPrevQuestion,
+    hasNextQuestion: hasNextQuestion,
   };
 };
 
@@ -320,7 +357,7 @@ module.exports = {
   startQuizAttempt,
   recordQuestionAttempt,
   getNextQuestion,
-  getPreviousQuestion,
+  getPrevQuestion,
   sumbitQuiz,
   getLeaderBoard,
   getQuizHistory,

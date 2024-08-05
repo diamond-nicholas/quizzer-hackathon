@@ -51,7 +51,7 @@ const getNextQuestion = catchAsync(async (req, res) => {
 });
 
 const getPreviousQuestion = catchAsync(async (req, res) => {
-  const result = await attemptService.getPreviousQuestion(
+  const result = await attemptService.getPrevQuestion(
     req.user,
     req.params.attemptId
   );
