@@ -21,7 +21,7 @@ const startQuizAttempt = async (currentUser, quizId) => {
     throw new ApiError(httpStatus.NOT_FOUND, "Quiz not found");
   }
 
-  if (currentUser === "tutor") {
+  if (currentUser.role === "tutor") {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Tutor can't attempt quiz");
   }
 
@@ -32,14 +32,80 @@ const startQuizAttempt = async (currentUser, quizId) => {
     );
   }
 
+  // Create a new quiz attempt record
   const attempt = await Attempt.create({
     user: currentUser._id,
     quiz: quizId,
     startTime: new Date(),
+    currentQuestionIndex: 0,
   });
 
-  return attempt;
+  const questions = await Question.find({ quiz: quizId }).sort("questionText");
+  const firstQuestion = questions[0];
+
+  if (!firstQuestion) {
+    throw new ApiError(
+      httpStatus.NOT_FOUND,
+      "No questions found for this quiz"
+    );
+  }
+
+  await AttemptedQuestion.create({
+    attemptedQuizId: attempt._id,
+    questionId: firstQuestion._id,
+    userId: currentUser._id,
+    startTime: new Date(),
+    isCorrect: false,
+    isAttempted: false,
+  });
+
+  const durationUsed = 0;
+  const remainingTime = firstQuestion.allotedTime;
+
+  return {
+    attempt,
+    firstQuestion: {
+      _id: firstQuestion._id,
+      questionText: firstQuestion.questionText,
+      options: firstQuestion.options.map((opt) => opt.text),
+      image: firstQuestion.image,
+      isMultipleSelect: firstQuestion.isMultipleSelect,
+      allotedTime: firstQuestion.allotedTime,
+      allotedMetric: firstQuestion.allotedMetric,
+      durationUsed: durationUsed,
+      remainingTime: remainingTime,
+      hasPrevQuestion: false,
+      hasNextQuestion: questions.length > 1,
+    },
+  };
 };
+
+// const startQuizAttempt = async (currentUser, quizId) => {
+//   const quiz = await Quiz.findById(quizId);
+
+//   if (!quiz) {
+//     throw new ApiError(httpStatus.NOT_FOUND, "Quiz not found");
+//   }
+
+//   if (currentUser === "tutor") {
+//     throw new ApiError(httpStatus.UNAUTHORIZED, "Tutor can't attempt quiz");
+//   }
+
+//   if (!quiz.isPublished) {
+//     throw new ApiError(
+//       httpStatus.UNPROCESSABLE_ENTITY,
+//       "Quiz is not published"
+//     );
+//   }
+
+//   const attempt = await Attempt.create({
+//     user: currentUser._id,
+//     quiz: quizId,
+//     startTime: new Date(),
+//   });
+
+//   return attempt;
+// };
 
 const recordQuestionAttempt = async (currentUser, questionId, questionData) => {
   const question = await Question.findById(questionId);
