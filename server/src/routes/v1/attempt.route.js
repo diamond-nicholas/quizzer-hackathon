@@ -19,14 +19,14 @@ router.post(
   attemptController.recordQuestionAttempt
 );
 
-router.get(
+router.post(
   "/question/:attemptId/next",
   isAuthenticated,
   validate(attemptValidation.getNextQuestion),
   attemptController.getNextQuestion
 );
 
-router.get(
+router.post(
   "/question/:attemptId/prev",
   isAuthenticated,
   validate(attemptValidation.getPreviousQuestion),
