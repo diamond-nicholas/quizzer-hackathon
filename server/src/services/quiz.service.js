@@ -66,9 +66,7 @@ const getAllQuiz = async (currentUser) => {
   const visibleQuizForStudents = quizes.filter((quiz) => quiz.isPublished);
 
   const visibleQuizForTutor = quizes.filter((quiz) => {
-    return (
-      quiz.isPublished || quiz.user.toString() === currentUser._id.toString()
-    );
+    return quiz.user.toString() === currentUser._id.toString();
   });
 
   if (currentUser.role !== "tutor") {
